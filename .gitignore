@@ -1,0 +1,3 @@
+chroma_db/
+*.db
+backend/chroma_db/
