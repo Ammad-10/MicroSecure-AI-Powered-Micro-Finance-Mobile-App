@@ -1,288 +1,444 @@
-# Micro-Finance Mobile Application
+# 💳 Emotion Detection Micro-Finance App
 
-A secure mobile payment and money transfer application with **AI-powered security features** that uses facial recognition and emotion detection to prevent fraudulent or coerced transactions.
+> AI-powered micro-finance mobile application with facial recognition and emotion detection for secure, fraud-proof transactions.
 
-## 🚀 Features
+[![Python](https://img.shields.io/badge/Python-3.8+-blue?logo=python)](https://python.org)
+[![React Native](https://img.shields.io/badge/React%20Native-Latest-blue?logo=react)](https://reactnative.dev)
+[![FastAPI](https://img.shields.io/badge/FastAPI-Latest-blue?logo=fastapi)](https://fastapi.tiangolo.com)
+[![License](https://img.shields.io/badge/License-Educational-green)](LICENSE)
 
-### Phase 1: Authentication System (✅ Completed)
-- **User Registration** with comprehensive validation
-- **Secure Login** with JWT authentication
-- **Face Image Capture** during signup
-- **CNIC Validation** (prevents duplicate accounts)
-- **Professional UI** with gradient design and smooth animations
+---
 
-### Future Phases
-- Balance management and money transfers
-- AI-powered facial recognition
-- Emotion detection for transaction security
-- Transaction history and analytics
+## 📋 Table of Contents
 
-## 🛠️ Technology Stack
+- [Overview](#overview)
+- [Key Features](#key-features)
+- [Tech Stack](#tech-stack)
+- [Quick Start](#quick-start)
+- [Project Structure](#project-structure)
+- [API Documentation](#api-documentation)
+- [Security](#security)
+- [Development Roadmap](#development-roadmap)
+- [Contributing](#contributing)
+- [Author](#author)
+
+---
+
+## 🎯 Overview
+
+This project is a **secure micro-finance mobile application** that leverages cutting-edge AI technology to prevent fraudulent and coerced transactions. Using facial recognition and emotion detection algorithms, the app ensures that transactions are made willingly by authenticated users.
+
+**Key Innovation:** Emotion detection blocks transactions if the user appears distressed, preventing coerced payments.
+
+---
+
+## ✨ Key Features
+
+### ✅ Phase 1: Authentication System (Complete)
+
+| Feature | Status | Details |
+|---------|--------|---------|
+| **User Registration** | ✅ | Full validation with age check (18+) |
+| **Secure Login** | ✅ | JWT-based token authentication |
+| **Face Capture** | ✅ | Camera integration for face images |
+| **CNIC Validation** | ✅ | Prevents duplicate accounts |
+| **Password Security** | ✅ | Bcrypt hashing with strength validation |
+
+### 🔄 Phase 2: Core Banking (In Progress)
+
+- 💰 Balance management & account overview
+- 💸 Money transfer between users
+- 📋 Transaction history & analytics
+- 🔔 Transaction notifications
+
+### 🚀 Phase 3: AI Security (Planned)
+
+- 🧠 Emotion detection for transaction validation
+- 👤 Facial recognition for user verification
+- 🎭 Gesture-based liveness detection
+- 🛡️ Fraud prevention algorithms
+
+---
+
+## 🛠️ Tech Stack
 
 ### Backend
-- **FastAPI** - Modern Python web framework
-- **SQLAlchemy** - ORM for database operations
-- **PostgreSQL/SQLite** - Database
-- **JWT** - Token-based authentication
-- **Bcrypt** - Password hashing
+```
+FastAPI          → Modern async Python framework
+SQLAlchemy       → ORM for database operations
+PostgreSQL/SQLite → Relational database
+JWT              → Secure token-based auth
+Bcrypt           → Password hashing
+ChromaDB         → Vector embeddings for face recognition
+TensorFlow/PyTorch → AI/ML models
+```
 
 ### Frontend
-- **React Native** - Cross-platform mobile development
-- **React Navigation** - Navigation management
-- **Vision Camera** - Camera integration
-- **Axios** - HTTP client
-- **Linear Gradient** - Beautiful UI gradients
+```
+React Native     → Cross-platform mobile development
+React Navigation → Navigation & routing
+Vision Camera    → Camera integration
+Axios            → HTTP client for API calls
+Linear Gradient  → Beautiful UI components
+```
 
-## 📋 Prerequisites
+### AI/ML
+```
+MediaPipe Face Landmarker  → Face detection & tracking
+OpenFace                   → Face embeddings
+Emotion Recognition Models → Emotion classification
+```
 
-- **Python 3.8+**
-- **Node.js 18+**
-- **npm or yarn**
-- **Android Studio** (for Android development)
-- **Xcode** (for iOS development, macOS only)
+---
 
-## 🔧 Setup Instructions
+## 🚀 Quick Start
+
+### Prerequisites
+
+```bash
+# Backend
+- Python 3.8 or higher
+- pip/pipenv for package management
+
+# Frontend
+- Node.js 18+ and npm/yarn
+- Android Studio (for Android development)
+- Xcode (for iOS development - macOS only)
+```
 
 ### Backend Setup
 
-1. **Navigate to backend directory:**
-   ```bash
-   cd backend
-   ```
+```bash
+# 1. Navigate to backend
+cd backend
 
-2. **Create virtual environment:**
-   ```bash
-   python -m venv venv
-   ```
+# 2. Create virtual environment
+python -m venv venv
 
-3. **Activate virtual environment:**
-   - Windows:
-     ```bash
-     venv\Scripts\activate
-     ```
-   - macOS/Linux:
-     ```bash
-     source venv/bin/activate
-     ```
+# 3. Activate virtual environment
+# On macOS/Linux:
+source venv/bin/activate
+# On Windows:
+venv\Scripts\activate
 
-4. **Install dependencies:**
-   ```bash
-   pip install -r requirements.txt
-   ```
+# 4. Install dependencies
+pip install -r requirements.txt
 
-5. **Configure environment variables:**
-   - Copy `.env.example` to `.env`
-   - Update the values as needed (default SQLite configuration works out of the box)
+# 5. Set environment variables
+cp .env.example .env
+# Edit .env with your configuration
 
-6. **Run the server:**
-   ```bash
-   uvicorn main:app --reload --port 8005
-   ```
+# 6. Run the server
+uvicorn main:app --reload --port 8005
+```
 
-   The API will be available at `http://localhost:8005`
-   
-   API Documentation: `http://localhost:8005/docs`
+**API will be available at:** `http://localhost:8005`  
+**Swagger Docs:** `http://localhost:8005/docs`
 
 ### Frontend Setup
 
-1. **Navigate to mobile directory:**
-   ```bash
-   cd mobile
-   ```
+```bash
+# 1. Navigate to mobile
+cd mobile
 
-2. **Install dependencies:**
-   ```bash
-   npm install
-   ```
+# 2. Install dependencies
+npm install
 
-3. **Update API URL:**
-   - Open `src/services/api.js`
-   - Update `API_BASE_URL` to your backend URL
-   - For Android emulator: `http://10.0.2.2:8005`
-   - For iOS simulator: `http://localhost:8005`
-   - For physical device: `http://10.54.14.135:8005`
+# 3. Update API endpoint in src/services/api.js
+# Choose based on your environment:
+# - Android Emulator:  http://10.0.2.2:8005
+# - iOS Simulator:     http://localhost:8005
+# - Physical Device:   <your-machine-ip>:8005
 
-4. **Install iOS dependencies (macOS only):**
-   ```bash
-   cd ios
-   pod install
-   cd ..
-   ```
+# 4. Run the app
+# Android:
+npm run android
 
-5. **Run the app:**
-   - Android:
-     ```bash
-     npm run android
-     ```
-   - iOS:
-     ```bash
-     npm run ios
-     ```
+# iOS (macOS only):
+npm run ios
+```
 
-## 📱 App Screens
+---
 
-### 1. Welcome Screen
-- App branding and features
-- Login and Signup buttons
-- Premium gradient design
+## 📁 Project Structure
 
-### 2. Login Screen
-- Username and password fields
-- Form validation
-- Password visibility toggle
-- Error handling with popups
+```
+Emotion-Detection/
+├── backend/                    # FastAPI server
+│   ├── main.py                # Entry point
+│   ├── auth.py                # Authentication logic
+│   ├── models.py              # Database models
+│   ├── schemas.py             # Request/response schemas
+│   ├── database.py            # Database configuration
+│   ├── services/
+│   │   ├── ai_service.py      # Face recognition & embeddings
+│   │   └── gesture_service.py # Liveness detection
+│   ├── requirements.txt        # Python dependencies
+│   └── .env.example           # Environment template
+│
+├── mobile/                     # React Native app
+│   ├── src/
+│   │   ├── screens/           # App screens
+│   │   ├── services/          # API services
+│   │   ├── utils/             # Helper functions
+│   │   └── App.js             # Main app component
+│   ├── android/               # Android-specific code
+│   ├── ios/                   # iOS-specific code
+│   ├── package.json           # Node dependencies
+│   └── app.json               # Expo configuration
+│
+├── docs/                      # Documentation
+├── README.md                  # This file
+└── .gitignore                 # Git ignore rules
+```
 
-### 3. Signup Screen
-- Comprehensive registration form:
-  - Full Name
-  - Father's Name
-  - Date of Birth (age 18+ validation)
-  - Email (format validation)
-  - CNIC (13 digits, uniqueness check)
-  - Username (uniqueness check)
-  - Password (strength validation)
-  - Face Image (camera capture)
-- Real-time validation
-- Professional UI with camera integration
+---
 
-## 🔐 Security Features
-
-### Current Implementation
-- **Password Hashing** - Bcrypt for secure password storage
-- **JWT Tokens** - Secure authentication
-- **CNIC Uniqueness** - One account per CNIC
-- **Input Validation** - Comprehensive client and server-side validation
-- **Face Image Storage** - Secure file storage for future AI integration
-
-### Future Implementation
-- **Facial Recognition** - Verify user identity during transactions
-- **Emotion Detection** - Cancel transactions if user appears distressed
-- **AI Security Model** - Prevent coerced transactions
-
-## 📊 Database Schema
-
-### User Table
-| Field | Type | Constraints |
-|-------|------|-------------|
-| id | Integer | Primary Key |
-| name | String | Not Null |
-| father_name | String | Not Null |
-| date_of_birth | Date | Not Null |
-| email | String | Unique, Not Null |
-| cnic | String(13) | Unique, Not Null |
-| username | String | Unique, Not Null |
-| password_hash | String | Not Null |
-| face_image_path | String | Nullable |
-| balance | Float | Default: 0.0 |
-| created_at | DateTime | Auto |
-| updated_at | DateTime | Auto |
-
-## 🧪 Testing
-
-### Backend Testing
-1. Start the backend server
-2. Open API documentation at `http://localhost:8005/docs`
-3. Test endpoints:
-   - `POST /api/auth/signup` - Create a new user
-   - `POST /api/auth/login` - Login with credentials
-   - `GET /api/auth/me` - Get current user info (requires token)
-
-### Frontend Testing
-1. Run the mobile app
-2. Test signup flow with all validations
-3. Test login flow
-4. Verify error messages for invalid inputs
-5. Test camera integration for face capture
-
-## 🐛 Troubleshooting
-
-### Backend Issues
-- **Database locked error**: Close any other connections to the database
-- **Module not found**: Ensure virtual environment is activated and dependencies are installed
-- **Port already in use**: Change port in uvicorn command: `uvicorn main:app --port 8006`
-
-### Frontend Issues
-- **Camera permission denied**: Check app permissions in device settings
-- **Network error**: Verify API_BASE_URL is correct for your setup
-- **Build errors**: Clear cache with `npm start -- --reset-cache`
-- **Android emulator can't reach localhost**: Use `10.0.2.2` instead of `localhost`
-
-## 📝 API Endpoints
+## 📡 API Endpoints
 
 ### Authentication
 
-#### Signup
+#### Sign Up
 ```http
 POST /api/auth/signup
 Content-Type: application/json
 
 {
-  "name": "John Doe",
-  "father_name": "Richard Doe",
+  "name": "Ammad Ajaz",
+  "father_name": "Muhammad Ajaz",
   "date_of_birth": "1990-01-01",
-  "email": "john@example.com",
+  "email": "ammad@example.com",
   "cnic": "1234567890123",
-  "username": "johndoe",
-   "password": "<REDACTED_PASSWORD>",
-  "face_image": "base64_encoded_image_string"
+  "username": "ammad_ajaz",
+  "password": "SecurePass123!",
+  "face_image": "base64_encoded_image"
+}
+
+Response: 201 Created
+{
+  "id": 1,
+  "username": "ammad_ajaz",
+  "email": "ammad@example.com",
+  "message": "User registered successfully"
 }
 ```
 
-#### Login
+#### Log In
 ```http
 POST /api/auth/login
 Content-Type: application/json
 
 {
-  "username": "johndoe",
-   "password": "<REDACTED_PASSWORD>"
+  "username": "ammad_ajaz",
+  "password": "SecurePass123!"
+}
+
+Response: 200 OK
+{
+  "access_token": "eyJhbGc...",
+  "token_type": "bearer",
+  "expires_in": 3600
 }
 ```
 
 #### Get Current User
 ```http
 GET /api/auth/me
-Authorization: Bearer <token>
+Authorization: Bearer {access_token}
+
+Response: 200 OK
+{
+  "id": 1,
+  "username": "ammad_ajaz",
+  "email": "ammad@example.com",
+  "balance": 0.0,
+  "created_at": "2024-05-10T10:30:00Z"
+}
 ```
 
-## 🎨 Design Philosophy
-
-- **Premium Aesthetics** - Vibrant gradients and modern design
-- **User-Friendly** - Intuitive navigation and clear feedback
-- **Professional** - Polished UI with smooth animations
-- **Secure** - Multiple layers of validation and security
-
-## 🚦 Next Steps
-
-1. ✅ Complete authentication system
-2. 🔄 Build main dashboard
-3. 🔄 Implement money transfer functionality
-4. 🔄 Develop AI facial recognition model
-5. 🔄 Integrate emotion detection
-6. 🔄 Add transaction history
-7. 🔄 Implement notifications
-
-## 📄 License
-
-This project is for educational purposes.
-
-## 👥 Contributors
-
-- **Developer**: Ammad Ajaz
+**Complete API documentation available at:** `/docs` (Swagger UI) or `/redoc` (ReDoc)
 
 ---
 
-<!-- 
-GITHUB REPOSITORY METADATA
-===========================
+## 🔐 Security
 
-REPO DESCRIPTION:
-AI-powered micro-finance mobile app with emotion detection security. FastAPI + React Native + PostgreSQL. Prevents coerced transactions.
+### Current Implementation
+- ✅ **Password Hashing** - Bcrypt with salt for secure storage
+- ✅ **JWT Authentication** - Token-based secure API access
+- ✅ **Input Validation** - Comprehensive client & server-side validation
+- ✅ **CNIC Uniqueness** - One account per CNIC (prevents fraud)
+- ✅ **Email Verification** - Unique email constraints
+- ✅ **Age Verification** - Minimum age 18+ enforcement
+- ✅ **Face Image Storage** - Secure encrypted storage
+- ✅ **No Credentials in Repo** - All sensitive data via environment variables
 
-TOPICS TO ADD:
-fastapi, react-native, postgresql, jwt-authentication, emotion-detection, facial-recognition, mobile-app, fintech, python, microfinance
+### Future Security Features
+- 🔒 **Facial Recognition** - Verify user identity during transactions
+- 🧠 **Emotion Detection** - Detect distress/coercion attempts
+- 🎭 **Liveness Detection** - Prevent spoofing with live face detection
+- 📱 **Biometric Authentication** - Fingerprint/face unlock
+- 🔐 **End-to-End Encryption** - Encrypted communication channels
 
-(Copy the description and topics above into your GitHub repository settings)
--->
+### Environment Variables
+```env
+DATABASE_URL=sqlite:///./microfinance.db
+SECRET_KEY=your_secret_key_here
+ALGORITHM=HS256
+TOKEN_EXPIRE_MINUTES=60
+```
 
-**Built with ❤️ using React Native and FastAPI**
+---
+
+## 📊 Database Schema
+
+### Users Table
+| Column | Type | Constraints | Purpose |
+|--------|------|-------------|---------|
+| id | Integer | PK | Unique identifier |
+| name | String | NN | Full name |
+| father_name | String | NN | Father's name |
+| date_of_birth | Date | NN | Age verification |
+| email | String | UQ, NN | Email contact |
+| cnic | String(13) | UQ, NN | National ID (fraud prevention) |
+| username | String | UQ, NN | Login username |
+| password_hash | String | NN | Bcrypt hashed password |
+| face_image_path | String | Nullable | Stored face image |
+| balance | Float | Default: 0.0 | Account balance |
+| created_at | DateTime | Auto | Registration timestamp |
+| updated_at | DateTime | Auto | Last update timestamp |
+
+---
+
+## 🧪 Testing
+
+### Backend Testing
+
+```bash
+# Run all tests
+pytest
+
+# Run specific test file
+pytest backend/test_signup_local.py -v
+
+# Run with coverage
+pytest --cov=backend tests/
+```
+
+### Manual Testing (Swagger UI)
+
+1. Navigate to `http://localhost:8005/docs`
+2. Try out endpoints with the interactive UI
+3. Test signup, login, and user retrieval flows
+
+### Frontend Testing
+
+```bash
+# Run on Android
+npm run android
+
+# Run on iOS
+npm run ios
+
+# Run on web (Expo)
+npm start
+```
+
+---
+
+## 🚦 Development Roadmap
+
+### ✅ Completed
+- [x] User authentication system
+- [x] JWT token management
+- [x] Database schema & models
+- [x] API endpoint structure
+- [x] Input validation
+- [x] Password hashing
+
+### 🔄 In Progress
+- [ ] Dashboard screen
+- [ ] Money transfer functionality
+- [ ] Transaction history
+- [ ] Notification system
+
+### 📋 Planned
+- [ ] Facial recognition model
+- [ ] Emotion detection algorithm
+- [ ] Gesture-based liveness detection
+- [ ] Advanced fraud detection
+- [ ] Push notifications
+- [ ] Transaction analytics
+
+---
+
+## 🐛 Troubleshooting
+
+### Backend Issues
+
+| Issue | Solution |
+|-------|----------|
+| **Database locked** | Close other connections; restart server |
+| **ModuleNotFoundError** | Activate virtual env: `source venv/bin/activate` |
+| **Port 8005 in use** | Change port: `uvicorn main:app --port 8006` |
+| **Import errors** | Run: `pip install -r requirements.txt` |
+
+### Frontend Issues
+
+| Issue | Solution |
+|-------|----------|
+| **Camera permission denied** | Check phone settings > App permissions |
+| **Cannot reach API** | Verify API_BASE_URL in `src/services/api.js` |
+| **Android emulator can't connect** | Use `10.0.2.2` instead of `localhost` |
+| **Build errors** | Clear cache: `npm start -- --reset-cache` |
+
+---
+
+## 📚 Additional Resources
+
+- [FastAPI Documentation](https://fastapi.tiangolo.com)
+- [React Native Docs](https://reactnative.dev)
+- [SQLAlchemy ORM](https://sqlalchemy.org)
+- [JWT Authentication](https://jwt.io)
+- [MediaPipe Face Detection](https://developers.google.com/mediapipe)
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Please follow these steps:
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+---
+
+## 📄 License
+
+This project is for **educational purposes only**. Use at your own risk.
+
+---
+
+## 👤 Author
+
+**Ammad Ajaz**
+
+- GitHub: [@Ammad-10](https://github.com/Ammad-10)
+- Project: [Emotion Detection Repository](https://github.com/Ammad-10/Emotion-Detection)
+
+---
+
+## 🎓 Project Metadata
+
+**Topics:** `fastapi` `react-native` `postgresql` `jwt-authentication` `emotion-detection` `facial-recognition` `mobile-app` `fintech` `python` `microfinance`
+
+**Description:** AI-powered micro-finance mobile app with emotion detection security. FastAPI + React Native + PostgreSQL. Prevents coerced transactions.
+
+---
+
+**Ammad Ajaz** — Data & AI Engineer
+- GitHub: [github.com/Ammad-10](https://github.com/Ammad-10)
+- LinkedIn: [linkedin.com/in/ammadajaz](https://linkedin.com/in/ammadajaz)
+
