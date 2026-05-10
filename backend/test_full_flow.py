@@ -4,6 +4,7 @@ import urllib.error
 import json
 import sqlite3
 import sys
+import os
 
 URL_HEALTH = "http://localhost:8001/api/health"
 URL_SIGNUP = "http://localhost:8001/api/auth/signup"
@@ -12,10 +13,10 @@ DATA = {
     "name": "Restart User",
     "father_name": "Restart Father",
     "date_of_birth": "2000-01-01",
-    "email": "restart@example.com",
-    "cnic": "7777777777777",
-    "username": "restartuser",
-    "password": "Password123",
+    "email": os.environ.get("TEST_EMAIL", "restart@example.com"),
+    "cnic": os.environ.get("TEST_CNIC", "7777777777777"),
+    "username": os.environ.get("TEST_USER", "restartuser"),
+    "password": os.environ.get("TEST_PASSWORD", ""),
     "face_image": "dnVsa2Fu"
 }
 

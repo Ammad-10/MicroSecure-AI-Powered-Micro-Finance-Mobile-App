@@ -63,8 +63,8 @@ const TransferReceiptScreen = ({ navigation, route }) => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <StatusBar barStyle="light-content" />
-            <LinearGradient colors={['#1a1a2e', '#16213e']} style={styles.background}>
+            <StatusBar barStyle="light-content" backgroundColor="#28282B" />
+            <LinearGradient colors={['#28282B', '#28282B']} style={styles.background}>
                 <ScrollView
                     showsVerticalScrollIndicator={false}
                     contentContainerStyle={styles.scrollContent}
@@ -72,7 +72,7 @@ const TransferReceiptScreen = ({ navigation, route }) => {
                     <Animated.View style={[styles.receiptCard, { opacity: fadeAnim, transform: [{ translateY: slideAnim }] }]}>
                         {/* Success Icon */}
                         <View style={styles.iconContainer}>
-                            <LinearGradient colors={['#4ecdc4', '#45b7af']} style={styles.iconGradient}>
+                            <LinearGradient colors={['#48A14D', '#2D7A32']} style={styles.iconGradient}>
                                 <Icon name="check" size={40} color="#fff" />
                             </LinearGradient>
                         </View>
@@ -112,7 +112,7 @@ const TransferReceiptScreen = ({ navigation, route }) => {
                         {/* AI Emotion Analysis Section */}
                         <View style={styles.emotionSection}>
                             <View style={styles.sectionHeader}>
-                                <Icon name="brain" size={20} color="#4A69FF" />
+                                <Icon name="brain" size={20} color="#48A14D" />
                                 <Text style={styles.sectionTitle}>AI Emotion Analysis</Text>
                             </View>
 
@@ -159,7 +159,7 @@ const TransferReceiptScreen = ({ navigation, route }) => {
 };
 
 const styles = StyleSheet.create({
-    container: { flex: 1, backgroundColor: '#1a1a2e' },
+    container: { flex: 1, backgroundColor: '#28282B' },
     background: { flex: 1 },
     scrollContent: {
         paddingHorizontal: 20,
@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
         paddingBottom: 40,
     },
     receiptCard: {
-        backgroundColor: '#fff',
+        backgroundColor: '#3A3A3D',
         borderRadius: 24,
         padding: 25,
         alignItems: 'center',
@@ -188,24 +188,24 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderWidth: 4,
-        borderColor: '#fff',
+        borderColor: '#3A3A3D',
     },
     successTitle: {
         fontSize: 18,
-        color: '#8e8e93',
+        color: '#A0A0A5',
         fontWeight: '600',
         marginBottom: 5,
     },
     amountText: {
         fontSize: 36,
-        fontWeight: 'bold',
-        color: '#1c1c1e',
+        fontWeight: '700',
+        color: '#FFFFFF',
         marginBottom: 25,
     },
     divider: {
         width: '100%',
         height: 1,
-        backgroundColor: '#f2f2f7',
+        backgroundColor: '#4A4A4D',
         marginVertical: 20,
     },
     detailsContainer: {
@@ -218,23 +218,23 @@ const styles = StyleSheet.create({
     },
     detailLabel: {
         fontSize: 14,
-        color: '#8e8e93',
+        color: '#A0A0A5',
     },
     detailValue: {
         fontSize: 14,
         fontWeight: '600',
-        color: '#1c1c1e',
+        color: '#FFFFFF',
     },
     statusBadge: {
-        backgroundColor: '#e8f7f5',
+        backgroundColor: 'rgba(72,161,77,0.15)',
         paddingHorizontal: 10,
         paddingVertical: 2,
         borderRadius: 12,
     },
     statusText: {
-        color: '#4ecdc4',
+        color: '#48A14D',
         fontSize: 12,
-        fontWeight: 'bold',
+        fontWeight: '700',
     },
     footerInfo: {
         flexDirection: 'row',
@@ -243,7 +243,7 @@ const styles = StyleSheet.create({
     },
     footerText: {
         fontSize: 12,
-        color: '#8e8e93',
+        color: '#606065',
     },
     emotionSection: {
         width: '100%',
@@ -257,8 +257,8 @@ const styles = StyleSheet.create({
     },
     sectionTitle: {
         fontSize: 15,
-        fontWeight: 'bold',
-        color: '#1c1c1e',
+        fontWeight: '700',
+        color: '#FFFFFF',
     },
     emotionRow: {
         marginBottom: 12,
@@ -270,17 +270,17 @@ const styles = StyleSheet.create({
     },
     emotionLabel: {
         fontSize: 13,
-        color: '#1c1c1e',
+        color: '#FFFFFF',
         fontWeight: '500',
     },
     emotionPercent: {
         fontSize: 12,
-        color: '#8e8e93',
-        fontWeight: 'bold',
+        color: '#A0A0A5',
+        fontWeight: '700',
     },
     progressBarBg: {
         height: 6,
-        backgroundColor: '#f2f2f7',
+        backgroundColor: '#4A4A4D',
         borderRadius: 3,
         overflow: 'hidden',
     },
@@ -290,7 +290,7 @@ const styles = StyleSheet.create({
     },
     noData: {
         fontSize: 12,
-        color: '#8e8e93',
+        color: '#606065',
         fontStyle: 'italic',
         textAlign: 'center',
     },
@@ -302,40 +302,40 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: 'rgba(255,255,255,0.15)',
+        backgroundColor: 'rgba(255,255,255,0.08)',
         paddingVertical: 15,
-        borderRadius: 16,
+        borderRadius: 13,
         gap: 10,
         borderWidth: 1,
-        borderColor: 'rgba(255,255,255,0.2)',
+        borderColor: '#4A4A4D',
     },
     doneButton: {
-        backgroundColor: '#4ecdc4',
+        backgroundColor: '#48A14D',
         paddingVertical: 15,
-        borderRadius: 16,
+        borderRadius: 13,
         alignItems: 'center',
     },
     buttonText: {
         color: '#fff',
         fontSize: 16,
-        fontWeight: 'bold',
+        fontWeight: '700',
     },
     doneButtonText: {
         color: '#fff',
         fontSize: 16,
-        fontWeight: 'bold',
+        fontWeight: '700',
     },
 });
 
 const getEmotionColor = (emotion) => {
     switch (emotion.toLowerCase()) {
-        case 'happy': return '#4ecdc4';
-        case 'neutral': return '#4A69FF';
-        case 'surprise': return '#ffca3a';
-        case 'sad': return '#1982c4';
-        case 'angry': return '#ff595e';
-        case 'fear': return '#6a4c93';
-        default: return '#8e8e93';
+        case 'happy': return '#48A14D';
+        case 'neutral': return '#48A14D';
+        case 'surprise': return '#FFA726';
+        case 'sad': return '#42A5F5';
+        case 'angry': return '#E53935';
+        case 'fear': return '#AB47BC';
+        default: return '#606065';
     }
 };
 

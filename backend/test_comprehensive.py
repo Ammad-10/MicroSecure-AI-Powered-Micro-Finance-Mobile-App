@@ -107,10 +107,10 @@ try:
         "name": "Test User Alpha",
         "father_name": "Father Alpha",
         "date_of_birth": "1990-05-15",
-        "email": "alpha_test@example.com",
-        "cnic": "3333333333333",
-        "username": "testalpha",
-        "password": "SecurePass123",
+        "email": os.environ.get("TEST_EMAIL", "alpha_test@example.com"),
+        "cnic": os.environ.get("TEST_CNIC", "3333333333333"),
+        "username": os.environ.get("TEST_USER", "testalpha"),
+        "password": os.environ.get("TEST_PASSWORD", ""),
         "face_image": test_face_b64
     }
     
@@ -118,10 +118,10 @@ try:
         "name": "Test User Beta",
         "father_name": "Father Beta",
         "date_of_birth": "1992-03-20",
-        "email": "beta_test@example.com",
-        "cnic": "4444444444444",
-        "username": "testbeta",
-        "password": "SecurePass123",
+        "email": os.environ.get("TEST_EMAIL_2", "beta_test@example.com"),
+        "cnic": os.environ.get("TEST_CNIC_2", "4444444444444"),
+        "username": os.environ.get("TEST_USER_2", "testbeta"),
+        "password": os.environ.get("TEST_PASSWORD", ""),
         "face_image": test_face_b64
     }
     
@@ -139,7 +139,7 @@ except Exception as e:
     log("Signup tests", False, str(e))
 
 # Test: Login
-res = api_request("POST", "/api/auth/login", {"username": "testalpha", "password": "SecurePass123"})
+res = api_request("POST", "/api/auth/login", {"username": os.environ.get("TEST_USER", "testalpha"), "password": os.environ.get("TEST_PASSWORD", "")})
 login_ok = res["status"] == 200
 token = res.get("data", {}).get("access_token", "") if login_ok else ""
 log("POST /api/auth/login", login_ok, f"Got token: {bool(token)}")
@@ -161,7 +161,7 @@ if token:
     # Test: Send money (only if has balance)
     if balance >= 50:
         res = api_request("POST", "/api/billing/send-money", 
-                          {"recipient_username": "testbeta", "amount": 50.0}, token=token)
+                  {"recipient_username": os.environ.get("TEST_USER_2", "testbeta"), "amount": 50.0}, token=token)
         log("POST /api/billing/send-money", res["status"] == 200, f"Status {res['status']}")
     else:
         log("POST /api/billing/send-money", True, f"Skipped (balance={balance})")

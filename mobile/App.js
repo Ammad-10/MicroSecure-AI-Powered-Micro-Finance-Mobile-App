@@ -8,9 +8,9 @@ import DashboardScreen from './src/screens/DashboardScreen';
 import BillPaymentScreen from './src/screens/BillPaymentScreen';
 import SendMoneyScreen from './src/screens/SendMoneyScreen';
 import TransactionHistoryScreen from './src/screens/TransactionHistoryScreen';
-import GestureLivenessScreen from './src/screens/GestureLivenessScreen';
 import TransferReceiptScreen from './src/screens/TransferReceiptScreen';
 import PPGLivenessScreen from './src/screens/PPGLivenessScreen';
+import DuressAlertScreen from './src/screens/DuressAlertScreen';
 
 const Stack = createStackNavigator();
 
@@ -37,9 +37,9 @@ const App = () => {
                 <Stack.Screen name="BillPayment" component={BillPaymentScreen} />
                 <Stack.Screen name="SendMoney" component={SendMoneyScreen} />
                 <Stack.Screen name="TransactionHistory" component={TransactionHistoryScreen} />
-                <Stack.Screen name="GestureLiveness" component={GestureLivenessScreen} />
                 <Stack.Screen name="TransferReceipt" component={TransferReceiptScreen} />
                 <Stack.Screen name="PPGLiveness" component={PPGLivenessScreen} />
+                <Stack.Screen name="DuressAlert" component={DuressAlertScreen} />
             </Stack.Navigator>
         </NavigationContainer>
     );

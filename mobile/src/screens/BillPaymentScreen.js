@@ -59,7 +59,7 @@ const BillPaymentScreen = ({ navigation }) => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <StatusBar barStyle="dark-content" />
+            <StatusBar barStyle="light-content" backgroundColor="#28282B" />
             <KeyboardAvoidingView
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
                 style={{ flex: 1 }}
@@ -67,7 +67,7 @@ const BillPaymentScreen = ({ navigation }) => {
                 <ScrollView contentContainerStyle={styles.scrollContent}>
                     <View style={styles.header}>
                         <TouchableOpacity onPress={() => navigation.goBack()}>
-                            <Icon name="arrow-left" size={28} color="#1c1c1e" />
+                            <Icon name="arrow-left" size={28} color="#FFFFFF" />
                         </TouchableOpacity>
                         <Text style={styles.headerTitle}>Pay Bill</Text>
                         <View style={{ width: 28 }} />
@@ -75,7 +75,7 @@ const BillPaymentScreen = ({ navigation }) => {
 
                     <View style={styles.illustrationContent}>
                         <View style={styles.iconCircle}>
-                            <Icon name="receipt" size={60} color="#667eea" />
+                            <Icon name="receipt" size={60} color="#48A14D" />
                         </View>
                         <Text style={styles.title}>Utility Bill Payment</Text>
                         <Text style={styles.subtitle}>Enter your 13-digit PSID number from your bill</Text>
@@ -85,7 +85,7 @@ const BillPaymentScreen = ({ navigation }) => {
                         <View style={styles.inputGroup}>
                             <Text style={styles.label}>PSID Number</Text>
                             <View style={styles.inputContainer}>
-                                <Icon name="numeric" size={22} color="#8e8e93" style={styles.inputIcon} />
+                                <Icon name="numeric" size={22} color="#606065" style={styles.inputIcon} />
                                 <TextInput
                                     style={styles.input}
                                     placeholder="e.g. 1000123456789"
@@ -100,7 +100,7 @@ const BillPaymentScreen = ({ navigation }) => {
                         <View style={styles.inputGroup}>
                             <Text style={styles.label}>Amount (Rs.)</Text>
                             <View style={styles.inputContainer}>
-                                <Icon name="cash" size={22} color="#8e8e93" style={styles.inputIcon} />
+                                <Icon name="cash" size={22} color="#606065" style={styles.inputIcon} />
                                 <TextInput
                                     style={styles.input}
                                     placeholder="Enter Amount"
@@ -117,7 +117,7 @@ const BillPaymentScreen = ({ navigation }) => {
                             disabled={loading}
                         >
                             <LinearGradient
-                                colors={['#667eea', '#764ba2']}
+                                colors={['#48A14D', '#2D7A32']}
                                 style={styles.gradient}
                                 start={{ x: 0, y: 0 }}
                                 end={{ x: 1, y: 0 }}
@@ -132,7 +132,7 @@ const BillPaymentScreen = ({ navigation }) => {
                     </View>
 
                     <View style={styles.noteContainer}>
-                        <Icon name="information-outline" size={20} color="#8e8e93" />
+                        <Icon name="information-outline" size={20} color="#606065" />
                         <Text style={styles.noteText}>
                             Payments are processed instantly. Please double check the PSID before proceeding.
                         </Text>
@@ -146,7 +146,7 @@ const BillPaymentScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: '#28282B',
     },
     scrollContent: {
         paddingBottom: 40,
@@ -160,8 +160,8 @@ const styles = StyleSheet.create({
     },
     headerTitle: {
         fontSize: 18,
-        fontWeight: 'bold',
-        color: '#1c1c1e',
+        fontWeight: '700',
+        color: '#FFFFFF',
     },
     illustrationContent: {
         alignItems: 'center',
@@ -172,21 +172,21 @@ const styles = StyleSheet.create({
         width: 120,
         height: 120,
         borderRadius: 60,
-        backgroundColor: '#f0f4ff',
+        backgroundColor: 'rgba(72,161,77,0.12)',
         justifyContent: 'center',
         alignItems: 'center',
         marginBottom: 20,
     },
     title: {
         fontSize: 24,
-        fontWeight: 'bold',
-        color: '#1c1c1e',
+        fontWeight: '700',
+        color: '#FFFFFF',
         textAlign: 'center',
         marginBottom: 10,
     },
     subtitle: {
         fontSize: 15,
-        color: '#8e8e93',
+        color: '#A0A0A5',
         textAlign: 'center',
         lineHeight: 22,
     },
@@ -200,17 +200,19 @@ const styles = StyleSheet.create({
     label: {
         fontSize: 14,
         fontWeight: '600',
-        color: '#1c1c1e',
+        color: '#A0A0A5',
         marginBottom: 8,
         marginLeft: 4,
     },
     inputContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: '#f2f2f7',
-        borderRadius: 12,
+        backgroundColor: '#3A3A3D',
+        borderRadius: 11,
         paddingHorizontal: 15,
-        height: 55,
+        height: 52,
+        borderWidth: 1,
+        borderColor: '#4A4A4D',
     },
     inputIcon: {
         marginRight: 10,
@@ -218,27 +220,27 @@ const styles = StyleSheet.create({
     input: {
         flex: 1,
         fontSize: 16,
-        color: '#1c1c1e',
+        color: '#FFFFFF',
     },
     payButton: {
         marginTop: 10,
-        borderRadius: 15,
+        borderRadius: 13,
         overflow: 'hidden',
         elevation: 5,
-        shadowColor: '#667eea',
+        shadowColor: '#48A14D',
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.3,
         shadowRadius: 8,
     },
     gradient: {
-        height: 55,
+        height: 52,
         justifyContent: 'center',
         alignItems: 'center',
     },
     payButtonText: {
         color: '#fff',
         fontSize: 18,
-        fontWeight: 'bold',
+        fontWeight: '700',
         letterSpacing: 0.5,
     },
     noteContainer: {
@@ -249,7 +251,7 @@ const styles = StyleSheet.create({
     },
     noteText: {
         fontSize: 13,
-        color: '#8e8e93',
+        color: '#606065',
         marginLeft: 10,
         flex: 1,
     },

@@ -2,16 +2,17 @@ import urllib.request
 import urllib.error
 import json
 import sqlite3
+import os
 
 URL = "http://localhost:8001/api/auth/signup"
 DATA = {
     "name": "Demo User",
     "father_name": "Demo Father",
     "date_of_birth": "1990-01-01",
-    "email": "demo@example.com",
-    "cnic": "1111111111111",
-    "username": "demouser",
-    "password": "demo1234",
+    "email": os.environ.get("TEST_EMAIL", "demo@example.com"),
+    "cnic": os.environ.get("TEST_CNIC", "0000000000000"),
+    "username": os.environ.get("TEST_USER", "demouser"),
+    "password": os.environ.get("TEST_PASSWORD", ""),
     "face_image": "dnVsa2Fu" # Base64 for 'vulkan'
 }
 
@@ -31,10 +32,10 @@ print("\n--- 2. UPDATING BALANCE TO 50,000 ---")
 try:
     conn = sqlite3.connect('microfinance.db')
     cursor = conn.cursor()
-    cursor.execute("UPDATE users SET balance = 50000.0 WHERE username = 'demouser'")
+    cursor.execute("UPDATE users SET balance = 50000.0 WHERE username = ?", (DATA["username"],))
     conn.commit()
     
-    cursor.execute("SELECT * FROM users WHERE username = 'demouser'")
+    cursor.execute("SELECT * FROM users WHERE username = ?", (DATA["username"],))
     user = cursor.fetchone()
     print(f"User Updated: {user}")
     conn.close()

@@ -36,7 +36,7 @@ data = {
     "email": f"realface_{t}@test.com",
     "cnic": cnic,
     "username": f"realface_{t}",
-    "password": "SecurePass123",
+    "password": os.environ.get("TEST_PASSWORD", ""),
     "face_image": face_base64,
 }
 

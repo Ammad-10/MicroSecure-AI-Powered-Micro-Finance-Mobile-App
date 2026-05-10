@@ -1,19 +1,31 @@
 {
-    "expo": {
-        "name": "MicroFinanceApp",
-        "slug": "micro-finance-app",
-        "version": "1.0.0",
-        "orientation": "portrait",
-        "userInterfaceStyle": "light",
-        "assetBundlePatterns": [
-            "**/*"
-        ],
-        "ios": {
-            "supportsTablet": true
-        },
-        "android": {
-            "package": "com.microfinance.app",
-            "usesCleartextTraffic": true
-        }
-    }
+  "expo": {
+    "name": "MicroFinanceApp",
+    "slug": "micro-finance-app",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSCameraUsageDescription": "Used for face verification and liveness checks.",
+        "NSFaceIDUsageDescription": "Used for secure biometric login."
+      }
+    },
+    "android": {
+      "package": "com.microfinance.app",
+      "usesCleartextTraffic": true,
+      "permissions": [
+        "CAMERA",
+        "USE_BIOMETRIC",
+        "USE_FINGERPRINT"
+      ]
+    },
+    "plugins": [
+      "expo-secure-store"
+    ]
+  }
 }

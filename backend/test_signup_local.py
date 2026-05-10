@@ -27,10 +27,10 @@ data = {
     "name": "Test User",
     "father_name": "Test Father",
     "date_of_birth": "1990-01-01",
-    "email": "test_signup_local@example.com",
-    "cnic": "1111111111114",
-    "username": "testuser_local_4",
-    "password": "Password123",
+    "email": os.environ.get("TEST_EMAIL", "test_signup_local@example.com"),
+    "cnic": os.environ.get("TEST_CNIC", "1111111111114"),
+    "username": os.environ.get("TEST_USER", "testuser_local_4"),
+    "password": os.environ.get("TEST_PASSWORD", ""),
     "face_image": encoded_string
 }
 

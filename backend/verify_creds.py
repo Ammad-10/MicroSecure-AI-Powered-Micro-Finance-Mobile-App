@@ -1,5 +1,6 @@
 import sqlite3
 from passlib.context import CryptContext
+import os
 
 pwd_context = CryptContext(schemes=["pbkdf2_sha256"], deprecated="auto")
 
@@ -24,5 +25,9 @@ def check_creds(username, password):
         print(f"Password for {username} is INCORRECT")
 
 if __name__ == "__main__":
-    check_creds("ahsan", "Password123")
-    check_creds("shabaz", "Password123")
+    test_user = os.environ.get("TEST_USER", "")
+    test_password = os.environ.get("TEST_PASSWORD", "")
+    if test_user and test_password:
+        check_creds(test_user, test_password)
+    else:
+        print("TEST_USER or TEST_PASSWORD not set; please set environment variables to run credential checks.")

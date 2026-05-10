@@ -24,10 +24,10 @@ USER_1 = {
     "name": "Test User A",
     "father_name": "Father A",
     "date_of_birth": "1990-01-01",
-    "email": "userA@example.com",
-    "cnic": "1111111111111",
-    "username": "usera",
-    "password": "Password123",
+    "email": os.environ.get("TEST_EMAIL", "userA@example.com"),
+    "cnic": os.environ.get("TEST_CNIC", "1111111111111"),
+    "username": os.environ.get("TEST_USER", "usera"),
+    "password": os.environ.get("TEST_PASSWORD", ""),
     "face_image": TEST_IMAGE_B64
 }
 
@@ -35,10 +35,10 @@ USER_2 = {
     "name": "Test User B",
     "father_name": "Father B",
     "date_of_birth": "1992-02-02",
-    "email": "userB@example.com",
-    "cnic": "2222222222222",
-    "username": "userb",
-    "password": "Password123",
+    "email": os.environ.get("TEST_EMAIL_2", "userB@example.com"),
+    "cnic": os.environ.get("TEST_CNIC_2", "2222222222222"),
+    "username": os.environ.get("TEST_USER_2", "userb"),
+    "password": os.environ.get("TEST_PASSWORD", ""),
     "face_image": TEST_IMAGE_B64
 }
 

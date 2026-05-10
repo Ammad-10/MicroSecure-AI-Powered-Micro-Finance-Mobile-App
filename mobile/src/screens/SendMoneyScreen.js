@@ -102,10 +102,17 @@ const SendMoneyScreen = ({ navigation }) => {
             const verifyResult = await verifyTransaction(user.cnic, base64Image);
 
             if (!verifyResult.success || !verifyResult.data.verified) {
-                Alert.alert(
-                    'Verification Failed',
-                    verifyResult.data?.message || verifyResult.error || 'Identity could not be verified.'
-                );
+                const emotion = verifyResult.data?.emotion;
+                const scores = verifyResult.data?.scores;
+
+                if (emotion && ['fear', 'angry', 'sad'].includes(emotion.toLowerCase())) {
+                    navigation.navigate('DuressAlert', {
+                        emotion,
+                        scores,
+                    });
+                } else {
+                    Alert.alert('Verification Failed', 'Face not recognized. Transaction blocked.');
+                }
                 return;
             }
 
@@ -168,7 +175,7 @@ const SendMoneyScreen = ({ navigation }) => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <StatusBar barStyle="dark-content" />
+            <StatusBar barStyle="light-content" backgroundColor="#28282B" />
             <KeyboardAvoidingView
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
                 style={{ flex: 1 }}
@@ -176,7 +183,7 @@ const SendMoneyScreen = ({ navigation }) => {
                 <ScrollView contentContainerStyle={styles.scrollContent}>
                     <View style={styles.header}>
                         <TouchableOpacity onPress={() => navigation.goBack()}>
-                            <Icon name="arrow-left" size={28} color="#1c1c1e" />
+                            <Icon name="arrow-left" size={28} color="#FFFFFF" />
                         </TouchableOpacity>
                         <Text style={styles.headerTitle}>Send Money</Text>
                         <View style={{ width: 28 }} />
@@ -184,7 +191,7 @@ const SendMoneyScreen = ({ navigation }) => {
 
                     <View style={styles.illustrationContent}>
                         <View style={styles.iconCircle}>
-                            <Icon name="account-check" size={80} color="#4A69FF" />
+                            <Icon name="account-check" size={80} color="#48A14D" />
                         </View>
                         <Text style={styles.title}>Secure Transfer</Text>
                         <Text style={styles.subtitle}>Face verification required for security</Text>
@@ -194,7 +201,7 @@ const SendMoneyScreen = ({ navigation }) => {
                         <View style={styles.inputGroup}>
                             <Text style={styles.label}>Recipient Phone Number</Text>
                             <View style={styles.inputContainer}>
-                                <Icon name="phone" size={22} color="#8e8e93" style={styles.inputIcon} />
+                                <Icon name="phone" size={22} color="#606065" style={styles.inputIcon} />
                                 <TextInput
                                     style={styles.input}
                                     placeholder="Enter 11-digit phone number"
@@ -210,7 +217,7 @@ const SendMoneyScreen = ({ navigation }) => {
                         <View style={styles.inputGroup}>
                             <Text style={styles.label}>Amount (Rs.)</Text>
                             <View style={styles.inputContainer}>
-                                <Icon name="cash-multiple" size={22} color="#8e8e93" style={styles.inputIcon} />
+                                <Icon name="cash-multiple" size={22} color="#606065" style={styles.inputIcon} />
                                 <TextInput
                                     style={styles.input}
                                     placeholder="0.00"
@@ -227,7 +234,7 @@ const SendMoneyScreen = ({ navigation }) => {
                             disabled={loading}
                         >
                             <LinearGradient
-                                colors={['#4A69FF', '#3248B2']}
+                                colors={['#48A14D', '#2D7A32']}
                                 style={styles.gradient}
                                 start={{ x: 0, y: 0 }}
                                 end={{ x: 1, y: 0 }}
@@ -260,7 +267,7 @@ const SendMoneyScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: '#28282B',
     },
     scrollContent: {
         paddingBottom: 40,
@@ -274,8 +281,8 @@ const styles = StyleSheet.create({
     },
     headerTitle: {
         fontSize: 18,
-        fontWeight: 'bold',
-        color: '#1c1c1e',
+        fontWeight: '700',
+        color: '#FFFFFF',
     },
     illustrationContent: {
         alignItems: 'center',
@@ -285,19 +292,19 @@ const styles = StyleSheet.create({
         width: 130,
         height: 130,
         borderRadius: 65,
-        backgroundColor: '#F0F3FF',
+        backgroundColor: 'rgba(72,161,77,0.12)',
         justifyContent: 'center',
         alignItems: 'center',
         marginBottom: 20,
     },
     title: {
         fontSize: 22,
-        fontWeight: 'bold',
-        color: '#1c1c1e',
+        fontWeight: '700',
+        color: '#FFFFFF',
     },
     subtitle: {
         fontSize: 14,
-        color: '#8e8e93',
+        color: '#A0A0A5',
         marginTop: 5,
     },
     form: {
@@ -310,7 +317,7 @@ const styles = StyleSheet.create({
     label: {
         fontSize: 14,
         fontWeight: '600',
-        color: '#8e8e93',
+        color: '#A0A0A5',
         marginBottom: 10,
         marginLeft: 4,
     },
@@ -318,7 +325,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         borderBottomWidth: 1.5,
-        borderBottomColor: '#F2F2F7',
+        borderBottomColor: '#4A4A4D',
         paddingBottom: 10,
     },
     inputIcon: {
@@ -327,16 +334,16 @@ const styles = StyleSheet.create({
     input: {
         flex: 1,
         fontSize: 18,
-        color: '#1c1c1e',
+        color: '#FFFFFF',
         fontWeight: '500',
     },
     sendButton: {
         marginTop: 10,
-        borderRadius: 16,
+        borderRadius: 13,
         overflow: 'hidden',
     },
     gradient: {
-        height: 60,
+        height: 52,
         justifyContent: 'center',
         alignItems: 'center',
     },
@@ -348,23 +355,23 @@ const styles = StyleSheet.create({
     sendButtonText: {
         color: '#fff',
         fontSize: 18,
-        fontWeight: 'bold',
+        fontWeight: '700',
     },
     quickNote: {
-        backgroundColor: '#F9F9FB',
+        backgroundColor: '#3A3A3D',
         margin: 25,
         padding: 20,
-        borderRadius: 16,
+        borderRadius: 18,
     },
     noteTitle: {
         fontSize: 14,
-        fontWeight: 'bold',
-        color: '#1c1c1e',
+        fontWeight: '700',
+        color: '#FFFFFF',
         marginBottom: 10,
     },
     noteContent: {
         fontSize: 13,
-        color: '#8e8e93',
+        color: '#A0A0A5',
         lineHeight: 20,
     },
     cameraContainer: {
@@ -415,7 +422,7 @@ const styles = StyleSheet.create({
         width: 60,
         height: 60,
         borderRadius: 30,
-        backgroundColor: '#4A69FF',
+        backgroundColor: '#48A14D',
     },
 });
 

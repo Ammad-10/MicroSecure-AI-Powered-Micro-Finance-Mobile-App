@@ -223,7 +223,7 @@ Content-Type: application/json
   "email": "john@example.com",
   "cnic": "1234567890123",
   "username": "johndoe",
-  "password": "SecurePass123",
+   "password": "<REDACTED_PASSWORD>",
   "face_image": "base64_encoded_image_string"
 }
 ```
@@ -235,7 +235,7 @@ Content-Type: application/json
 
 {
   "username": "johndoe",
-  "password": "SecurePass123"
+   "password": "<REDACTED_PASSWORD>"
 }
 ```
 
@@ -268,11 +268,8 @@ This project is for educational purposes.
 
 ## 👥 Contributors
 
-- Developer: Ahsan butt
+- Contributors listed in project metadata.
 
 ---
 
 **Built with ❤️ using React Native and FastAPI**
-
-user ahsan
-password : Password123

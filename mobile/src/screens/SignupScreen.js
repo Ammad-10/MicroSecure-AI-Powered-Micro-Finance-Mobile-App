@@ -12,6 +12,7 @@ import {
     KeyboardAvoidingView,
     Platform,
     Image,
+    Animated,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Icon from '@expo/vector-icons/MaterialCommunityIcons';
@@ -28,8 +29,8 @@ import {
     validatePhone,
 } from '../utils/validation';
 
-const SignupScreen = ({ navigation, route }) => {
-    const [formData, setFormData] = useState(route.params?.formData || {
+const SignupScreen = ({ navigation }) => {
+    const [formData, setFormData] = useState({
         name: '',
         father_name: '',
         date_of_birth: '',
@@ -40,31 +41,26 @@ const SignupScreen = ({ navigation, route }) => {
         password: '',
     });
 
-    const [faceImage, setFaceImage] = useState(route.params?.faceImage || null);
+    const [faceImage, setFaceImage] = useState(null);
     const [showCamera, setShowCamera] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState({});
-    const [livenessVerified, setLivenessVerified] = useState(false);
-    const [livenessResult, setLivenessResult] = useState(null);
 
     const cameraRef = useRef(null);
     const [permission, requestPermission] = useCameraPermissions();
+    const fadeAnim = useRef(new Animated.Value(0)).current;
+    const slideAnim = useRef(new Animated.Value(20)).current;
 
-    // Listen for Liveness verification result coming back from GestureLivenessScreen
     useEffect(() => {
-        if (route.params?.livenessVerified) {
-            setLivenessVerified(true);
-            setLivenessResult(route.params.livenessResult || null);
-            if (errors.liveness) {
-                setErrors(prev => ({ ...prev, liveness: null }));
-            }
-        }
-    }, [route.params?.livenessVerified]);
+        Animated.parallel([
+            Animated.timing(fadeAnim, { toValue: 1, duration: 300, useNativeDriver: true }),
+            Animated.timing(slideAnim, { toValue: 0, duration: 300, useNativeDriver: true }),
+        ]).start();
+    }, []);
 
     const updateField = (field, value) => {
         setFormData({ ...formData, [field]: value });
-        // Clear error when user starts typing
         if (errors[field]) {
             setErrors({ ...errors, [field]: null });
         }
@@ -99,10 +95,6 @@ const SignupScreen = ({ navigation, route }) => {
 
         if (!faceImage) {
             newErrors.face_image = 'Face image is required';
-        }
-
-        if (!livenessVerified) {
-            newErrors.liveness = 'Liveness verification is required';
         }
 
         setErrors(newErrors);
@@ -143,17 +135,6 @@ const SignupScreen = ({ navigation, route }) => {
         }
     };
 
-    const handleStartLiveness = () => {
-        if (!faceImage) {
-            Alert.alert('Face Image Required', 'Please capture your face image first before liveness detection.');
-            return;
-        }
-        navigation.replace('GestureLiveness', {
-            formData,
-            faceImage,
-        });
-    };
-
     const handleSignup = async () => {
         if (!validateForm()) {
             Alert.alert('Validation Error', 'Please fix all errors before submitting.');
@@ -163,7 +144,6 @@ const SignupScreen = ({ navigation, route }) => {
         setLoading(true);
 
         try {
-            // Convert image to base64
             let base64Image;
             try {
                 base64Image = await FileSystem.readAsStringAsync(faceImage, {
@@ -221,10 +201,10 @@ const SignupScreen = ({ navigation, route }) => {
                     <Text style={styles.cameraInstruction}>Position your face in the frame</Text>
                     <View style={styles.cameraButtons}>
                         <TouchableOpacity
-                            style={styles.cancelButton}
+                            style={styles.cameraCancelBtn}
                             onPress={() => setShowCamera(false)}
                         >
-                            <Text style={styles.cancelButtonText}>Cancel</Text>
+                            <Text style={styles.cameraCancelText}>Cancel</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
                             style={styles.captureButton}
@@ -239,13 +219,8 @@ const SignupScreen = ({ navigation, route }) => {
     }
 
     return (
-        <LinearGradient
-            colors={['#667eea', '#764ba2']}
-            style={styles.container}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
-        >
-            <StatusBar barStyle="light-content" />
+        <View style={styles.container}>
+            <StatusBar barStyle="light-content" backgroundColor="#28282B" />
             <KeyboardAvoidingView
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
                 style={styles.container}
@@ -254,368 +229,344 @@ const SignupScreen = ({ navigation, route }) => {
                     contentContainerStyle={styles.scrollContent}
                     keyboardShouldPersistTaps="handled"
                 >
-                    {/* Header */}
-                    <View style={styles.header}>
-                        <TouchableOpacity
-                            onPress={() => navigation.goBack()}
-                            style={styles.backButton}
-                        >
-                            <Icon name="arrow-left" size={28} color="#fff" />
-                        </TouchableOpacity>
-                        <Text style={styles.title}>Create Account</Text>
-                        <Text style={styles.subtitle}>Join us today</Text>
-                    </View>
-
-                    {/* Form */}
-                    <View style={styles.formContainer}>
-                        {/* Name */}
-                        <View style={styles.inputGroup}>
-                            <Text style={styles.label}>Full Name *</Text>
-                            <View style={styles.inputWrapper}>
-                                <Icon name="account" size={20} color="#667eea" style={styles.inputIcon} />
-                                <TextInput
-                                    style={styles.input}
-                                    placeholder="Enter your full name"
-                                    placeholderTextColor="#999"
-                                    value={formData.name}
-                                    onChangeText={(value) => updateField('name', value)}
-                                />
-                            </View>
-                            {errors.name && <Text style={styles.errorText}>{errors.name}</Text>}
+                    <Animated.View style={{ opacity: fadeAnim, transform: [{ translateY: slideAnim }] }}>
+                        {/* Header */}
+                        <View style={styles.header}>
+                            <TouchableOpacity
+                                onPress={() => navigation.goBack()}
+                                style={styles.backButton}
+                            >
+                                <Icon name="chevron-left" size={28} color="#FFFFFF" />
+                            </TouchableOpacity>
+                            <Text style={styles.title}>Create Account</Text>
+                            <Text style={styles.subtitle}>Join us today</Text>
                         </View>
 
-                        {/* Father Name */}
-                        <View style={styles.inputGroup}>
-                            <Text style={styles.label}>Father's Name *</Text>
-                            <View style={styles.inputWrapper}>
-                                <Icon name="account-supervisor" size={20} color="#667eea" style={styles.inputIcon} />
-                                <TextInput
-                                    style={styles.input}
-                                    placeholder="Enter father's name"
-                                    placeholderTextColor="#999"
-                                    value={formData.father_name}
-                                    onChangeText={(value) => updateField('father_name', value)}
-                                />
-                            </View>
-                            {errors.father_name && <Text style={styles.errorText}>{errors.father_name}</Text>}
-                        </View>
-
-                        {/* Date of Birth */}
-                        <View style={styles.inputGroup}>
-                            <Text style={styles.label}>Date of Birth (YYYY-MM-DD) *</Text>
-                            <View style={styles.inputWrapper}>
-                                <Icon name="calendar" size={20} color="#667eea" style={styles.inputIcon} />
-                                <TextInput
-                                    style={styles.input}
-                                    placeholder="1990-01-01"
-                                    placeholderTextColor="#999"
-                                    value={formData.date_of_birth}
-                                    onChangeText={(value) => updateField('date_of_birth', value)}
-                                />
-                            </View>
-                            {errors.date_of_birth && <Text style={styles.errorText}>{errors.date_of_birth}</Text>}
-                        </View>
-
-                        {/* Email */}
-                        <View style={styles.inputGroup}>
-                            <Text style={styles.label}>Email *</Text>
-                            <View style={styles.inputWrapper}>
-                                <Icon name="email" size={20} color="#667eea" style={styles.inputIcon} />
-                                <TextInput
-                                    style={styles.input}
-                                    placeholder="your.email@example.com"
-                                    placeholderTextColor="#999"
-                                    value={formData.email}
-                                    onChangeText={(value) => updateField('email', value)}
-                                    keyboardType="email-address"
-                                    autoCapitalize="none"
-                                />
-                            </View>
-                            {errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
-                        </View>
-
-                        {/* CNIC */}
-                        <View style={styles.inputGroup}>
-                            <Text style={styles.label}>CNIC (13 digits) *</Text>
-                            <View style={styles.inputWrapper}>
-                                <Icon name="card-account-details" size={20} color="#667eea" style={styles.inputIcon} />
-                                <TextInput
-                                    style={styles.input}
-                                    placeholder="1234567890123"
-                                    placeholderTextColor="#999"
-                                    value={formData.cnic}
-                                    onChangeText={(value) => updateField('cnic', value)}
-                                    keyboardType="numeric"
-                                    maxLength={13}
-                                />
-                            </View>
-                            {errors.cnic && <Text style={styles.errorText}>{errors.cnic}</Text>}
-                        </View>
-
-                        {/* Phone Number */}
-                        <View style={styles.inputGroup}>
-                            <Text style={styles.label}>Phone Number (11 digits) *</Text>
-                            <View style={styles.inputWrapper}>
-                                <Icon name="phone" size={20} color="#667eea" style={styles.inputIcon} />
-                                <TextInput
-                                    style={styles.input}
-                                    placeholder="03XXXXXXXXX"
-                                    placeholderTextColor="#999"
-                                    value={formData.phone_number}
-                                    onChangeText={(value) => updateField('phone_number', value)}
-                                    keyboardType="phone-pad"
-                                    maxLength={11}
-                                />
-                            </View>
-                            {errors.phone_number && <Text style={styles.errorText}>{errors.phone_number}</Text>}
-                        </View>
-
-                        {/* Username */}
-                        <View style={styles.inputGroup}>
-                            <Text style={styles.label}>Username *</Text>
-                            <View style={styles.inputWrapper}>
-                                <Icon name="at" size={20} color="#667eea" style={styles.inputIcon} />
-                                <TextInput
-                                    style={styles.input}
-                                    placeholder="Choose a username"
-                                    placeholderTextColor="#999"
-                                    value={formData.username}
-                                    onChangeText={(value) => updateField('username', value)}
-                                    autoCapitalize="none"
-                                />
-                            </View>
-                            {errors.username && <Text style={styles.errorText}>{errors.username}</Text>}
-                        </View>
-
-                        {/* Password */}
-                        <View style={styles.inputGroup}>
-                            <Text style={styles.label}>Password *</Text>
-                            <View style={styles.inputWrapper}>
-                                <Icon name="lock" size={20} color="#667eea" style={styles.inputIcon} />
-                                <TextInput
-                                    style={styles.input}
-                                    placeholder="Min 8 chars, letters & digits"
-                                    placeholderTextColor="#999"
-                                    value={formData.password}
-                                    onChangeText={(value) => updateField('password', value)}
-                                    secureTextEntry={!showPassword}
-                                />
-                                <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-                                    <Icon
-                                        name={showPassword ? 'eye-off' : 'eye'}
-                                        size={20}
-                                        color="#667eea"
+                        {/* Form */}
+                        <View style={styles.formContainer}>
+                            {/* Name */}
+                            <View style={styles.inputGroup}>
+                                <Text style={styles.label}>Full Name</Text>
+                                <View style={[styles.inputWrapper, errors.name && styles.inputError]}>
+                                    <Icon name="account" size={20} color="#606065" style={styles.inputIcon} />
+                                    <TextInput
+                                        style={styles.input}
+                                        placeholder="Enter your full name"
+                                        placeholderTextColor="#606065"
+                                        value={formData.name}
+                                        onChangeText={(value) => updateField('name', value)}
                                     />
+                                </View>
+                                {errors.name && <Text style={styles.errorText}>{errors.name}</Text>}
+                            </View>
+
+                            {/* Father Name */}
+                            <View style={styles.inputGroup}>
+                                <Text style={styles.label}>Father's Name</Text>
+                                <View style={[styles.inputWrapper, errors.father_name && styles.inputError]}>
+                                    <Icon name="account-supervisor" size={20} color="#606065" style={styles.inputIcon} />
+                                    <TextInput
+                                        style={styles.input}
+                                        placeholder="Enter father's name"
+                                        placeholderTextColor="#606065"
+                                        value={formData.father_name}
+                                        onChangeText={(value) => updateField('father_name', value)}
+                                    />
+                                </View>
+                                {errors.father_name && <Text style={styles.errorText}>{errors.father_name}</Text>}
+                            </View>
+
+                            {/* Date of Birth */}
+                            <View style={styles.inputGroup}>
+                                <Text style={styles.label}>Date of Birth (YYYY-MM-DD)</Text>
+                                <View style={[styles.inputWrapper, errors.date_of_birth && styles.inputError]}>
+                                    <Icon name="calendar" size={20} color="#606065" style={styles.inputIcon} />
+                                    <TextInput
+                                        style={styles.input}
+                                        placeholder="1990-01-01"
+                                        placeholderTextColor="#606065"
+                                        value={formData.date_of_birth}
+                                        onChangeText={(value) => updateField('date_of_birth', value)}
+                                    />
+                                </View>
+                                {errors.date_of_birth && <Text style={styles.errorText}>{errors.date_of_birth}</Text>}
+                            </View>
+
+                            {/* Email */}
+                            <View style={styles.inputGroup}>
+                                <Text style={styles.label}>Email</Text>
+                                <View style={[styles.inputWrapper, errors.email && styles.inputError]}>
+                                    <Icon name="email" size={20} color="#606065" style={styles.inputIcon} />
+                                    <TextInput
+                                        style={styles.input}
+                                        placeholder="your.email@example.com"
+                                        placeholderTextColor="#606065"
+                                        value={formData.email}
+                                        onChangeText={(value) => updateField('email', value)}
+                                        keyboardType="email-address"
+                                        autoCapitalize="none"
+                                    />
+                                </View>
+                                {errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
+                            </View>
+
+                            {/* CNIC */}
+                            <View style={styles.inputGroup}>
+                                <Text style={styles.label}>CNIC (13 digits)</Text>
+                                <View style={[styles.inputWrapper, errors.cnic && styles.inputError]}>
+                                    <Icon name="card-account-details" size={20} color="#606065" style={styles.inputIcon} />
+                                    <TextInput
+                                        style={styles.input}
+                                        placeholder="1234567890123"
+                                        placeholderTextColor="#606065"
+                                        value={formData.cnic}
+                                        onChangeText={(value) => updateField('cnic', value)}
+                                        keyboardType="numeric"
+                                        maxLength={13}
+                                    />
+                                </View>
+                                {errors.cnic && <Text style={styles.errorText}>{errors.cnic}</Text>}
+                            </View>
+
+                            {/* Phone Number */}
+                            <View style={styles.inputGroup}>
+                                <Text style={styles.label}>Phone Number (11 digits)</Text>
+                                <View style={[styles.inputWrapper, errors.phone_number && styles.inputError]}>
+                                    <Icon name="phone" size={20} color="#606065" style={styles.inputIcon} />
+                                    <TextInput
+                                        style={styles.input}
+                                        placeholder="03XXXXXXXXX"
+                                        placeholderTextColor="#606065"
+                                        value={formData.phone_number}
+                                        onChangeText={(value) => updateField('phone_number', value)}
+                                        keyboardType="phone-pad"
+                                        maxLength={11}
+                                    />
+                                </View>
+                                {errors.phone_number && <Text style={styles.errorText}>{errors.phone_number}</Text>}
+                            </View>
+
+                            {/* Username */}
+                            <View style={styles.inputGroup}>
+                                <Text style={styles.label}>Username</Text>
+                                <View style={[styles.inputWrapper, errors.username && styles.inputError]}>
+                                    <Icon name="at" size={20} color="#606065" style={styles.inputIcon} />
+                                    <TextInput
+                                        style={styles.input}
+                                        placeholder="Choose a username"
+                                        placeholderTextColor="#606065"
+                                        value={formData.username}
+                                        onChangeText={(value) => updateField('username', value)}
+                                        autoCapitalize="none"
+                                    />
+                                </View>
+                                {errors.username && <Text style={styles.errorText}>{errors.username}</Text>}
+                            </View>
+
+                            {/* Password */}
+                            <View style={styles.inputGroup}>
+                                <Text style={styles.label}>Password</Text>
+                                <View style={[styles.inputWrapper, errors.password && styles.inputError]}>
+                                    <Icon name="lock" size={20} color="#606065" style={styles.inputIcon} />
+                                    <TextInput
+                                        style={styles.input}
+                                        placeholder="Min 8 chars, letters & digits"
+                                        placeholderTextColor="#606065"
+                                        value={formData.password}
+                                        onChangeText={(value) => updateField('password', value)}
+                                        secureTextEntry={!showPassword}
+                                    />
+                                    <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+                                        <Icon
+                                            name={showPassword ? 'eye-off' : 'eye'}
+                                            size={20}
+                                            color="#606065"
+                                        />
+                                    </TouchableOpacity>
+                                </View>
+                                {errors.password && <Text style={styles.errorText}>{errors.password}</Text>}
+                            </View>
+
+                            {/* Face Image */}
+                            <View style={styles.inputGroup}>
+                                <Text style={styles.label}>Face Image</Text>
+                                <TouchableOpacity
+                                    style={styles.imageButton}
+                                    onPress={handleCaptureFace}
+                                    activeOpacity={0.8}
+                                >
+                                    {faceImage ? (
+                                        <View style={styles.imagePreview}>
+                                            <Image source={{ uri: `file://${faceImage}` }} style={styles.previewImage} />
+                                            <Text style={styles.imageButtonText}>Retake Photo</Text>
+                                        </View>
+                                    ) : (
+                                        <View style={styles.imagePlaceholder}>
+                                            <Icon name="camera" size={40} color="#48A14D" />
+                                            <Text style={styles.imageButtonText}>Capture Face Image</Text>
+                                        </View>
+                                    )}
+                                </TouchableOpacity>
+                                {errors.face_image && <Text style={styles.errorText}>{errors.face_image}</Text>}
+                            </View>
+
+                            {/* Signup Button */}
+                            <TouchableOpacity
+                                style={[styles.signupButton, loading && styles.disabledButton]}
+                                onPress={handleSignup}
+                                disabled={loading}
+                                activeOpacity={0.8}
+                            >
+                                <LinearGradient
+                                    colors={loading ? ['#3A3A3D', '#3A3A3D'] : ['#48A14D', '#2D7A32']}
+                                    style={styles.signupGradient}
+                                    start={{ x: 0, y: 0 }}
+                                    end={{ x: 1, y: 0 }}
+                                >
+                                    {loading ? (
+                                        <ActivityIndicator color="#606065" />
+                                    ) : (
+                                        <Text style={styles.signupButtonText}>Create Account</Text>
+                                    )}
+                                </LinearGradient>
+                            </TouchableOpacity>
+
+                            {/* Login Link */}
+                            <View style={styles.loginContainer}>
+                                <Text style={styles.loginText}>Already have an account? </Text>
+                                <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+                                    <Text style={styles.loginLink}>Login</Text>
                                 </TouchableOpacity>
                             </View>
-                            {errors.password && <Text style={styles.errorText}>{errors.password}</Text>}
                         </View>
-
-                        {/* Face Image */}
-                        <View style={styles.inputGroup}>
-                            <Text style={styles.label}>Face Image *</Text>
-                            <TouchableOpacity
-                                style={styles.imageButton}
-                                onPress={handleCaptureFace}
-                                activeOpacity={0.8}
-                            >
-                                {faceImage ? (
-                                    <View style={styles.imagePreview}>
-                                        <Image source={{ uri: `file://${faceImage}` }} style={styles.previewImage} />
-                                        <Text style={styles.imageButtonText}>Retake Photo</Text>
-                                    </View>
-                                ) : (
-                                    <View style={styles.imagePlaceholder}>
-                                        <Icon name="camera" size={40} color="#667eea" />
-                                        <Text style={styles.imageButtonText}>Capture Face Image</Text>
-                                    </View>
-                                )}
-                            </TouchableOpacity>
-                            {errors.face_image && <Text style={styles.errorText}>{errors.face_image}</Text>}
-                        </View>
-
-                        {/* Gesture Liveness Verification */}
-                        <View style={styles.inputGroup}>
-                            <Text style={styles.label}>Liveness Verification *</Text>
-                            <TouchableOpacity
-                                style={[
-                                    styles.ppgButton,
-                                    livenessVerified && styles.ppgButtonVerified,
-                                ]}
-                                onPress={handleStartLiveness}
-                                activeOpacity={0.8}
-                            >
-                                <View style={styles.ppgButtonContent}>
-                                    <Icon
-                                        name={livenessVerified ? 'check-circle' : 'hand-peace'}
-                                        size={32}
-                                        color={livenessVerified ? '#4ecdc4' : '#ff6b6b'}
-                                    />
-                                    <View style={styles.ppgTextContainer}>
-                                        <Text style={[
-                                            styles.ppgTitle,
-                                            livenessVerified && styles.ppgTitleVerified,
-                                        ]}>
-                                            {livenessVerified ? 'Liveness Verified ✓' : 'Gesture Challenge'}
-                                        </Text>
-                                        <Text style={styles.ppgSubtitle}>
-                                            {livenessVerified
-                                                ? `Gesture sequence verified successfully`
-                                                : 'Tap to perform random hand gestures'}
-                                        </Text>
-                                    </View>
-                                    {!livenessVerified && (
-                                        <Icon name="chevron-right" size={24} color="#999" />
-                                    )}
-                                </View>
-                            </TouchableOpacity>
-                            {errors.liveness && <Text style={styles.errorText}>{errors.liveness}</Text>}
-                        </View>
-
-                        {/* Signup Button */}
-                        <TouchableOpacity
-                            style={styles.signupButton}
-                            onPress={handleSignup}
-                            disabled={loading}
-                            activeOpacity={0.8}
-                        >
-                            <LinearGradient
-                                colors={['#667eea', '#764ba2']}
-                                style={styles.signupGradient}
-                                start={{ x: 0, y: 0 }}
-                                end={{ x: 1, y: 0 }}
-                            >
-                                {loading ? (
-                                    <ActivityIndicator color="#fff" />
-                                ) : (
-                                    <Text style={styles.signupButtonText}>Create Account</Text>
-                                )}
-                            </LinearGradient>
-                        </TouchableOpacity>
-
-                        {/* Login Link */}
-                        <View style={styles.loginContainer}>
-                            <Text style={styles.loginText}>Already have an account? </Text>
-                            <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-                                <Text style={styles.loginLink}>Login</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
+                    </Animated.View>
                 </ScrollView>
             </KeyboardAvoidingView>
-        </LinearGradient>
+        </View>
     );
 };
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor: '#28282B',
     },
     scrollContent: {
         flexGrow: 1,
-        paddingHorizontal: 30,
+        paddingHorizontal: 24,
         paddingTop: 60,
-        paddingBottom: 30,
+        paddingBottom: 32,
     },
     header: {
-        marginBottom: 30,
+        marginBottom: 32,
     },
     backButton: {
         marginBottom: 20,
     },
     title: {
-        fontSize: 36,
-        fontWeight: 'bold',
-        color: '#fff',
+        fontSize: 22,
+        fontWeight: '700',
+        color: '#FFFFFF',
         marginBottom: 8,
     },
     subtitle: {
-        fontSize: 16,
-        color: '#fff',
-        opacity: 0.9,
+        fontSize: 14,
+        color: '#A0A0A5',
     },
     formContainer: {
-        backgroundColor: '#fff',
-        borderRadius: 20,
-        padding: 25,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 10 },
-        shadowOpacity: 0.3,
-        shadowRadius: 20,
-        elevation: 10,
+        backgroundColor: '#3A3A3D',
+        borderRadius: 18,
+        padding: 20,
+        borderWidth: 1,
+        borderColor: '#4A4A4D',
     },
     inputGroup: {
         marginBottom: 18,
     },
     label: {
-        fontSize: 14,
-        fontWeight: '600',
-        color: '#333',
-        marginBottom: 8,
+        fontSize: 12,
+        fontWeight: '500',
+        color: '#A0A0A5',
+        marginBottom: 6,
     },
     inputWrapper: {
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: '#f5f5f5',
-        borderRadius: 12,
-        paddingHorizontal: 15,
-        borderWidth: 1,
-        borderColor: '#e0e0e0',
+        backgroundColor: '#3A3A3D',
+        borderRadius: 11,
+        paddingHorizontal: 14,
+        borderWidth: 1.5,
+        borderColor: '#4A4A4D',
+        height: 52,
+    },
+    inputError: {
+        borderColor: '#E53935',
     },
     inputIcon: {
         marginRight: 10,
     },
     input: {
         flex: 1,
-        paddingVertical: 14,
-        fontSize: 16,
-        color: '#333',
+        fontSize: 15,
+        color: '#FFFFFF',
     },
     errorText: {
-        color: '#ff4444',
-        fontSize: 12,
-        marginTop: 5,
+        color: '#E53935',
+        fontSize: 11,
+        marginTop: 4,
     },
     imageButton: {
-        borderRadius: 12,
-        borderWidth: 2,
-        borderColor: '#667eea',
+        borderRadius: 13,
+        borderWidth: 1.5,
+        borderColor: '#48A14D',
         borderStyle: 'dashed',
         overflow: 'hidden',
     },
     imagePlaceholder: {
         alignItems: 'center',
-        paddingVertical: 30,
+        paddingVertical: 28,
     },
     imagePreview: {
         alignItems: 'center',
-        paddingVertical: 15,
+        paddingVertical: 14,
     },
     previewImage: {
-        width: 120,
-        height: 120,
-        borderRadius: 60,
+        width: 110,
+        height: 110,
+        borderRadius: 55,
         marginBottom: 10,
+        borderWidth: 2,
+        borderColor: '#48A14D',
     },
     imageButtonText: {
-        color: '#667eea',
-        fontSize: 16,
+        color: '#48A14D',
+        fontSize: 14,
         fontWeight: '600',
         marginTop: 8,
     },
     signupButton: {
-        marginTop: 10,
-        borderRadius: 12,
+        marginTop: 8,
+        borderRadius: 13,
         overflow: 'hidden',
+        shadowColor: '#48A14D',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.4,
+        shadowRadius: 8,
+        elevation: 8,
+    },
+    disabledButton: {
+        shadowOpacity: 0,
+        elevation: 0,
     },
     signupGradient: {
-        paddingVertical: 16,
+        height: 52,
+        justifyContent: 'center',
         alignItems: 'center',
     },
     signupButtonText: {
-        color: '#fff',
-        fontSize: 18,
-        fontWeight: 'bold',
+        color: '#FFFFFF',
+        fontSize: 15,
+        fontWeight: '600',
     },
     loginContainer: {
         flexDirection: 'row',
@@ -623,13 +574,13 @@ const styles = StyleSheet.create({
         marginTop: 20,
     },
     loginText: {
-        color: '#666',
+        color: '#A0A0A5',
         fontSize: 14,
     },
     loginLink: {
-        color: '#667eea',
+        color: '#48A14D',
         fontSize: 14,
-        fontWeight: 'bold',
+        fontWeight: '600',
     },
     cameraContainer: {
         flex: 1,
@@ -641,11 +592,11 @@ const styles = StyleSheet.create({
         paddingVertical: 60,
     },
     cameraInstruction: {
-        color: '#fff',
-        fontSize: 18,
+        color: '#FFFFFF',
+        fontSize: 16,
         textAlign: 'center',
-        backgroundColor: 'rgba(0,0,0,0.5)',
-        padding: 15,
+        backgroundColor: 'rgba(0,0,0,0.6)',
+        padding: 14,
     },
     cameraButtons: {
         flexDirection: 'row',
@@ -653,22 +604,22 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingHorizontal: 30,
     },
-    cancelButton: {
-        backgroundColor: 'rgba(255,255,255,0.3)',
-        paddingHorizontal: 30,
+    cameraCancelBtn: {
+        backgroundColor: 'rgba(255,255,255,0.25)',
+        paddingHorizontal: 28,
         paddingVertical: 12,
-        borderRadius: 25,
+        borderRadius: 13,
     },
-    cancelButtonText: {
-        color: '#fff',
-        fontSize: 16,
-        fontWeight: 'bold',
+    cameraCancelText: {
+        color: '#FFFFFF',
+        fontSize: 15,
+        fontWeight: '600',
     },
     captureButton: {
         width: 70,
         height: 70,
         borderRadius: 35,
-        backgroundColor: '#fff',
+        backgroundColor: '#FFFFFF',
         justifyContent: 'center',
         alignItems: 'center',
     },
@@ -676,41 +627,7 @@ const styles = StyleSheet.create({
         width: 60,
         height: 60,
         borderRadius: 30,
-        backgroundColor: '#667eea',
-    },
-    // PPG Liveness Styles
-    ppgButton: {
-        borderRadius: 12,
-        borderWidth: 2,
-        borderColor: '#ff6b6b',
-        borderStyle: 'dashed',
-        padding: 15,
-    },
-    ppgButtonVerified: {
-        borderColor: '#4ecdc4',
-        borderStyle: 'solid',
-        backgroundColor: 'rgba(78, 205, 196, 0.05)',
-    },
-    ppgButtonContent: {
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-    ppgTextContainer: {
-        flex: 1,
-        marginLeft: 12,
-    },
-    ppgTitle: {
-        fontSize: 16,
-        fontWeight: '600',
-        color: '#ff6b6b',
-    },
-    ppgTitleVerified: {
-        color: '#4ecdc4',
-    },
-    ppgSubtitle: {
-        fontSize: 12,
-        color: '#999',
-        marginTop: 3,
+        backgroundColor: '#48A14D',
     },
 });
 

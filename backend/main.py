@@ -106,6 +106,14 @@ def signup(user_data: UserSignup, db: Session = Depends(get_db)):
             detail="Username already taken"
         )
     
+    # Check if phone number already exists
+    existing_phone = db.query(User).filter(User.phone_number == user_data.phone_number).first()
+    if existing_phone:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Phone number already registered"
+        )
+    
     # Save face image
     face_image_path = None
     
@@ -316,7 +324,7 @@ def send_money(transfer: SendMoney, db: Session = Depends(get_db), current_user:
 
 
 @app.post("/api/billing/verify-transaction")
-def verify_transaction_endpoint(data: TransactionVerification, db: Session = Depends(get_db)):
+def verify_transaction_endpoint(data: TransactionVerification, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     # Save temp image
     try:
         image_data = base64.b64decode(data.face_image)

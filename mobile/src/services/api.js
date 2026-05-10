@@ -3,10 +3,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Base URL - For Android emulator use 10.0.2.2, for iOS simulator use localhost
 // Base URL - For Android emulator use 10.0.2.2, for iOS simulator use localhost
+// Base URL - For Android emulator use 10.0.2.2, for iOS simulator use localhost
 // For physical device, use your computer's IP address (find using ipconfig/ifconfig)
 // const API_BASE_URL = 'http://localhost:8005';      // Use for iOS Simulator
-// const API_BASE_URL = 'http://10.0.2.2:8005';      // Use for Android Emulator
-const API_BASE_URL = 'http://192.168.0.110:8005';  // Use for Physical Device (Current Machine IP)
+// const API_BASE_URL = 'http://10.0.2.2:8005';       // Use for Android Emulator
+const API_BASE_URL = 'http://10.46.43.47:8005';     // Use for Physical Device (Current Machine IP)
 
 // Create axios instance
 const api = axios.create({
@@ -124,9 +125,8 @@ export const sendMoney = async (transferData) => {
 };
 
 /**
- * Get transaction history
+ * Verify Transaction Face
  */
-// Verify Transaction Face
 export const verifyTransaction = async (cnic, faceImageBase64) => {
     try {
         const response = await api.post('/api/billing/verify-transaction', {
@@ -194,5 +194,3 @@ export const detectGesture = async (frame) => {
 export const logout = async () => {
     await AsyncStorage.removeItem('access_token');
 };
-
-export default api;

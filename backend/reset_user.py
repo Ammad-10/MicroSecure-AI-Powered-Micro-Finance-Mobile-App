@@ -19,18 +19,18 @@ def reset_data():
     print("Updating all user balances to 1000...")
     cursor.execute("UPDATE users SET balance = 1000.0")
     
-    # 2. Reset password for 'ahsan'
-    new_password = "Password123"
-    hashed_password = get_password_hash(new_password)
-    print(f"Resetting password for user 'ahsan' to '{new_password}'...")
-    cursor.execute("UPDATE users SET password_hash = ? WHERE username = 'ahsan'", (hashed_password,))
-    
-    # 3. Reset password for 'shabaz'
-    print(f"Resetting password for user 'shabaz' to '{new_password}'...")
-    cursor.execute("UPDATE users SET password_hash = ? WHERE username = 'shabaz'", (hashed_password,))
+    # 2. Reset password for test users (use env vars)
+    test_password = os.environ.get("TEST_PASSWORD", "")
+    test_user = os.environ.get("TEST_USER", "")
+    if not test_password or not test_user:
+        print("TEST_PASSWORD or TEST_USER not set; skipping user password resets.")
+    else:
+        hashed_password = get_password_hash(test_password)
+        print(f"Resetting password for test user '{test_user}'...")
+        cursor.execute("UPDATE users SET password_hash = ? WHERE username = ?", (hashed_password, test_user))
     
     if cursor.rowcount == 0:
-        print("Warning: User 'ahsan' or 'shabaz' might not be found in database.")
+        print("Warning: Test user(s) might not be found in database.")
     else:
         print("Successfully reset passwords.")
 
