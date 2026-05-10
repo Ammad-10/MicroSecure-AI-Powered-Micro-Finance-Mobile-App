@@ -268,8 +268,21 @@ This project is for educational purposes.
 
 ## 👥 Contributors
 
-- Contributors listed in project metadata.
+- **Developer**: Ammad Ajaz
 
 ---
+
+<!-- 
+GITHUB REPOSITORY METADATA
+===========================
+
+REPO DESCRIPTION:
+AI-powered micro-finance mobile app with emotion detection security. FastAPI + React Native + PostgreSQL. Prevents coerced transactions.
+
+TOPICS TO ADD:
+fastapi, react-native, postgresql, jwt-authentication, emotion-detection, facial-recognition, mobile-app, fintech, python, microfinance
+
+(Copy the description and topics above into your GitHub repository settings)
+-->
 
 **Built with ❤️ using React Native and FastAPI**
